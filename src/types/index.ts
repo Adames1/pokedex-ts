@@ -1,6 +1,6 @@
 import z from "zod"
-import { PokemonAPIListSchema, PokemonsAPIListSchema, ResultsAPIResponseSchema } from "../utils/pokemonSchema"
+import { ResultsAPISchema, PokemonAPISchema, PokemonsAPISchema } from "../utils/pokemon-schema"
 
-export type ResultsAPIResponse = z.infer<typeof ResultsAPIResponseSchema>
-export type Pokemons = z.infer<typeof PokemonsAPIListSchema>;
-export type Pokemon = z.infer<typeof PokemonAPIListSchema>
+export type Results = z.infer<typeof ResultsAPISchema>
+export type Pokemons = z.infer<typeof PokemonsAPISchema>
+export type Pokemon = z.infer<typeof PokemonAPISchema>
