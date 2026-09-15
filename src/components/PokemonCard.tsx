@@ -1,4 +1,5 @@
 import type { Pokemon } from "../types";
+import TypeBadge from "./TypeBadge";
 
 type PokemonCardProps = {
   pokemon: Pokemon;
@@ -17,10 +18,16 @@ export default function PokemonCard({ pokemon }: PokemonCardProps) {
       />
 
       <span className="text-xs font-semibold text-gray-400">{`N° ${pokemon.id}`}</span>
+
       <h2 className="text-lg font-extrabold text-slate-800 capitalize">
         {pokemon.name}
       </h2>
-      <div>Tipo</div>
+
+      <div className="flex flex-col gap-2 md:flex-row">
+        {pokemon.types.map((type) => (
+          <TypeBadge key={type.slot} type={type} />
+        ))}
+      </div>
     </div>
   );
 }

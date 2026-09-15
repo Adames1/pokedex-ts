@@ -23,7 +23,15 @@ export const PokemonAPISchema = z.object({
             })
 
         })
-    })
+    }),
+    types: z.array(
+        z.object({
+            slot: z.number(),
+            type: z.object({
+                name: z.string(),
+            })
+        })
+    )
 })
 
 export const PokemonsAPISchema = z.array(PokemonAPISchema)
