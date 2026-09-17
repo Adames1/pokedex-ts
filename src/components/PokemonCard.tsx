@@ -1,3 +1,4 @@
+import { useAppStore } from "../store/useAppStore";
 import type { Pokemon } from "../types";
 import TypeBadge from "./TypeBadge";
 
@@ -6,8 +7,13 @@ type PokemonCardProps = {
 };
 
 export default function PokemonCard({ pokemon }: PokemonCardProps) {
+  const selectPokemon = useAppStore((state) => state.selectPokemon);
+
   return (
-    <div className="bg-white shadow rounded-lg p-4 flex flex-col gap-2 items-center justify-center text-center">
+    <div
+      className="bg-white shadow rounded-lg p-4 flex flex-col gap-2 items-center justify-center text-center cursor-pointer"
+      onClick={() => selectPokemon(pokemon.id)}
+    >
       <img
         src={
           pokemon.sprites.versions["generation-v"]["black-white"].animated

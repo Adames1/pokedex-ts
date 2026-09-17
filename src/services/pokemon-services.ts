@@ -1,5 +1,6 @@
 import axios from "axios"
-import { PokemonsAPISchema, ResultsAPISchema } from "../utils/pokemon-schema"
+import { PokemonsAPISchema, ResultsAPISchema, PokemmonDetailsAPISchema } from "../utils/pokemon-schema"
+import type { Pokemon } from "../types"
 
 export async function getPokemons() {
     const url = "https://pokeapi.co/api/v2/pokemon/?limit=12&offset=0"
@@ -14,4 +15,16 @@ export async function getPokemons() {
         console.log(pokemonsResults)
         return pokemons.data
     }
+}
+
+export async function getPokemonById(id: Pokemon["id"]) {
+    const url = `https://pokeapi.co/api/v2/pokemon/${id}/`
+    const { data } = await axios(url)
+    const results = PokemmonDetailsAPISchema.safeParse(data)
+    console.log(results.data)
+
+    if (results.success) {
+        return results.data
+    }
+
 }

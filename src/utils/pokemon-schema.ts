@@ -35,3 +35,39 @@ export const PokemonAPISchema = z.object({
 })
 
 export const PokemonsAPISchema = z.array(PokemonAPISchema)
+
+export const PokemmonDetailsAPISchema = z.object({
+    id: z.number(),
+    name: z.string(),
+    sprites: z.object({
+        front_default: z.string().url(),
+    }),
+    types: z.array(
+        z.object({
+            slot: z.number(),
+            type: z.object({
+                name: z.string(),
+            })
+        })
+    ),
+    abilities: z.array(
+        z.object({
+            is_hidden: z.boolean(),
+            slot: z.number(),
+            ability: z.object({
+                name: z.string()
+            })
+        })
+    ),
+    height: z.number(),
+    weight: z.number(),
+    base_experience: z.number(),
+    stats: z.array(
+        z.object({
+            base_stat: z.number(),
+            stat: z.object({
+                name: z.string()
+            })
+        })
+    )
+})
