@@ -35,7 +35,7 @@ export default function PanelPokemonDetails() {
         ) : (
           <p className="text-md text-slate-800 text-center my-20">
             No has seleccionado un Pokémon. Has clic en un Pokémon para ver el
-            detalle
+            detalle.
           </p>
         )}
       </>
