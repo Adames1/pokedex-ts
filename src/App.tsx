@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppStore } from "./store/useAppStore";
 import PokemonCard from "./components/PokemonCard";
 import PanelPokemonDetails from "./components/PanelPokemonDetails";
@@ -6,10 +6,17 @@ import PanelPokemonDetails from "./components/PanelPokemonDetails";
 export default function App() {
   const pokemons = useAppStore((state) => state.pokemons);
   const fetchPokemons = useAppStore((state) => state.fetchPokemons);
+  const searchPokemon = useAppStore((state) => state.searchPokemon);
+  const [searchPokemonName, setSearchPokemonName] = useState("");
 
   useEffect(() => {
     fetchPokemons();
   }, []);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchPokemonName(e.target.value);
+    searchPokemon(e.target.value);
+  };
 
   return (
     <div className="min-h-screen bg-[#F1F2FA] overflow-hidden">
@@ -21,13 +28,18 @@ export default function App() {
         <div className="flex flex-col md:flex-row items-start gap-6">
           <div className="w-full space-y-6">
             {/* Busqueda, opciones de filtros y paginacion */}
-            <div className="">
+            <div className="bg-white rounded-lg shadow px-4 py-4 flex items-center gap-4">
               <input
                 type="search"
-                name=""
-                id=""
+                name="name"
                 placeholder="Search your Pokémon!"
+                className="w-full outline-none text-sm placeholder:text-gray-500"
+                onChange={handleChange}
+                value={searchPokemonName}
               />
+              <div className="bg-red-400 p-1 rounded-lg">
+                <img src={"/public/icon-pokeball_search.svg"} />
+              </div>
             </div>
 
             <div className="">Otros filtros</div>

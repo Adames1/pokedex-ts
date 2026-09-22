@@ -1,5 +1,5 @@
 import type { StateCreator } from "zustand"
-import { getPokemonById, getPokemons } from "../services/pokemon-services"
+import { getPokemonById, getPokemons, getPokemonByName } from "../services/pokemon-services"
 import type { Pokemon, PokemonDetails, Pokemons } from "../types"
 
 export type PokemonsSlicesType = {
@@ -7,6 +7,7 @@ export type PokemonsSlicesType = {
     selectedPokemon: PokemonDetails
     fetchPokemons: () => Promise<void>
     selectPokemon: (id: Pokemon["id"]) => void
+    searchPokemon: (name: Pokemon["name"]) => Promise<void>
     showPanel: boolean
     closePanel: () => void
 
@@ -29,6 +30,14 @@ export const createPokemonSlice: StateCreator<PokemonsSlicesType> = (set) => ({
             selectedPokemon,
             showPanel: true
         })
+    },
+    searchPokemon: async (name) => {
+        const pokemon = await getPokemonByName(name)
+        if (pokemon) {
+            set({
+                pokemons: [pokemon]
+            })
+        }
     },
     closePanel: () => {
         set({
