@@ -18,7 +18,7 @@ export default function PanelPokemonDetails() {
         transform transition-transform duration-300 ease-in-out
         ${showPanel ? "translate-x-0" : "translate-x-full"}
          md:inset-auto md:z-auto md:translate-x-0
-        md:w-70 lg:w-75 md:h-160 lg:h-170 md:shrink-0 md:sticky shadow`}
+        md:w-82 md:h-160 lg:h-170 md:shrink-0 md:sticky shadow`}
     >
       <>
         <button

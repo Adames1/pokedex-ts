@@ -15,7 +15,7 @@ export default function PokemonDetails({
       <img
         src={selectedPokemon.sprites.front_default}
         alt={selectedPokemon.name}
-        className="w-20 h-20 mx-auto object-contain"
+        className="w-45 h-45 mx-auto object-contain"
       />
 
       {/* number/id pokemon */}

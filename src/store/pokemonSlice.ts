@@ -4,8 +4,9 @@ import type { Pokemon, PokemonDetails, Pokemons } from "../types"
 
 export type PokemonsSlicesType = {
     pokemons: Pokemons
+    searchResults: Pokemons
     selectedPokemon: PokemonDetails
-    fetchPokemons: () => Promise<void>
+    fetchPokemons: (rateLimit: string) => Promise<void>
     selectPokemon: (id: Pokemon["id"]) => void
     searchPokemon: (name: Pokemon["name"]) => Promise<void>
     showPanel: boolean
@@ -15,11 +16,12 @@ export type PokemonsSlicesType = {
 
 export const createPokemonSlice: StateCreator<PokemonsSlicesType> = (set) => ({
     pokemons: [],
+    searchResults: [],
     selectedPokemon: {} as PokemonDetails,
     showPanel: false,
 
-    fetchPokemons: async () => {
-        const pokemons = await getPokemons()
+    fetchPokemons: async (rateLimit) => {
+        const pokemons = await getPokemons(rateLimit)
         set({
             pokemons
         })
@@ -35,7 +37,7 @@ export const createPokemonSlice: StateCreator<PokemonsSlicesType> = (set) => ({
         const pokemon = await getPokemonByName(name)
         if (pokemon) {
             set({
-                pokemons: [pokemon]
+                searchResults: [pokemon]
             })
         }
     },

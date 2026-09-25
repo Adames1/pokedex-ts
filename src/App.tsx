@@ -5,18 +5,32 @@ import PanelPokemonDetails from "./components/PanelPokemonDetails";
 
 export default function App() {
   const pokemons = useAppStore((state) => state.pokemons);
+  const searchResults = useAppStore((state) => state.searchResults);
   const fetchPokemons = useAppStore((state) => state.fetchPokemons);
   const searchPokemon = useAppStore((state) => state.searchPokemon);
   const [searchPokemonName, setSearchPokemonName] = useState("");
+  const [rateLimit, setRateLimite] = useState("12");
 
   useEffect(() => {
-    fetchPokemons();
-  }, []);
+    fetchPokemons(rateLimit);
+  }, [rateLimit]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchPokemonName(e.target.value);
-    searchPokemon(e.target.value);
+    const value = e.target.value;
+    setSearchPokemonName(value);
+
+    if (value) {
+      searchPokemon(value);
+    }
   };
+
+  const handlePagination = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setRateLimite(value);
+  };
+
+  // condicion para decidir si mostrar pokemon buscado o la lista previa
+  const resultsPokemons = searchPokemonName ? searchResults : pokemons;
 
   return (
     <div className="min-h-screen bg-[#F1F2FA] overflow-hidden">
@@ -38,15 +52,29 @@ export default function App() {
                 value={searchPokemonName}
               />
               <div className="bg-red-400 p-1 rounded-lg">
-                <img src={"/public/icon-pokeball_search.svg"} />
+                <img src={"/icon-pokeball_search.svg"} />
               </div>
             </div>
 
-            <div className="">Otros filtros</div>
+            <div className="flex items-center justify-end gap-2">
+              <p className="text-gray-600 font-semibold text-sm">
+                Pokemones por página:
+              </p>
+              <select
+                name="pages"
+                className="bg-white rounded-lg px-2 py-1 border border-gray-300 outline-none font-semibold text-gray-600"
+                onChange={handlePagination}
+                value={rateLimit}
+              >
+                <option value="12">12</option>
+                <option value="24">24</option>
+                <option value="48">48</option>
+              </select>
+            </div>
 
             {/* Contenido principal */}
             <main className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 min-w-0">
-              {pokemons.map((pokemon) => (
+              {resultsPokemons.map((pokemon) => (
                 <PokemonCard key={pokemon.id} pokemon={pokemon} />
               ))}
             </main>
