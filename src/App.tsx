@@ -2,26 +2,34 @@ import { useEffect, useState } from "react";
 import { useAppStore } from "./store/useAppStore";
 import PokemonCard from "./components/PokemonCard";
 import PanelPokemonDetails from "./components/PanelPokemonDetails";
+import { useDebounce } from "./hooks/useDebounce";
 
 export default function App() {
   const pokemons = useAppStore((state) => state.pokemons);
   const searchResults = useAppStore((state) => state.searchResults);
   const fetchPokemons = useAppStore((state) => state.fetchPokemons);
   const searchPokemon = useAppStore((state) => state.searchPokemon);
+
   const [searchPokemonName, setSearchPokemonName] = useState("");
   const [rateLimit, setRateLimite] = useState("12");
+  const debouncedSearchPokemonName = useDebounce(searchPokemonName, 400);
+
+  const isLoadingList = useAppStore((state) => state.isLoadingList);
+  const isSearching = useAppStore((state) => state.isSearching);
+
+  const isSearchMode = searchPokemonName.trim() !== "";
+  const isLoading = isSearchMode ? isSearching : isLoadingList;
 
   useEffect(() => {
     fetchPokemons(rateLimit);
-  }, [rateLimit]);
+  }, [fetchPokemons, rateLimit]);
+
+  useEffect(() => {
+    searchPokemon(debouncedSearchPokemonName);
+  }, [debouncedSearchPokemonName, searchPokemon]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchPokemonName(value);
-
-    if (value) {
-      searchPokemon(value);
-    }
+    setSearchPokemonName(e.target.value);
   };
 
   const handlePagination = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -30,7 +38,7 @@ export default function App() {
   };
 
   // condicion para decidir si mostrar pokemon buscado o la lista previa
-  const resultsPokemons = searchPokemonName ? searchResults : pokemons;
+  const resultsPokemons = isSearchMode ? searchResults : pokemons;
 
   return (
     <div className="min-h-screen bg-[#F1F2FA] overflow-hidden">
@@ -74,9 +82,19 @@ export default function App() {
 
             {/* Contenido principal */}
             <main className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 min-w-0">
-              {resultsPokemons.map((pokemon) => (
-                <PokemonCard key={pokemon.id} pokemon={pokemon} />
-              ))}
+              {isLoading ? (
+                <div className="col-span-full mx-auto text-gray-400 text-xl">
+                  Cargando...
+                </div>
+              ) : resultsPokemons.length === 0 && isSearchMode ? (
+                <p className="col-span-full text-center text-gray-500">
+                  No se encontró ningún Pokémon
+                </p>
+              ) : (
+                resultsPokemons.map((pokemon) => (
+                  <PokemonCard key={pokemon.id} pokemon={pokemon} />
+                ))
+              )}
             </main>
           </div>
 

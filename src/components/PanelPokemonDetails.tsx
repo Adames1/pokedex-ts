@@ -4,6 +4,7 @@ import PokemonDetails from "./PokemonDetails";
 
 export default function PanelPokemonDetails() {
   const selectedPokemon = useAppStore((state) => state.selectedPokemon);
+  const isLoadingDetails = useAppStore((state) => state.isLoadingDetails);
   const showPanel = useAppStore((state) => state.showPanel);
   const closePanel = useAppStore((state) => state.closePanel);
 
@@ -28,7 +29,9 @@ export default function PanelPokemonDetails() {
           Cerrar
         </button>
 
-        {hasSelectedPokemon ? (
+        {isLoadingDetails || !selectedPokemon ? (
+          <div className="flex items-center justify-center">Cargando...</div>
+        ) : hasSelectedPokemon ? (
           <div className="mt-10 md:mt-0 flex items-center justify-center">
             <PokemonDetails selectedPokemon={selectedPokemon} />
           </div>
