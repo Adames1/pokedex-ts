@@ -5,6 +5,8 @@ import PokemonCard from "./components/PokemonCard";
 import PanelPokemonDetails from "./components/PanelPokemonDetails";
 import PokeballLogo from "./components/PokeballLogo";
 import { Search } from "lucide-react";
+import PokemonNotResults from "./components/PokemonNotResults";
+import PokemonLoading from "./components/PokemonLoading";
 
 // Fondo (solo CSS): resplandor rojo suave arriba
 const backgroundGlow = {
@@ -64,7 +66,7 @@ export default function App() {
       </div>
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 py-8 space-y-8 overflow-hidden">
-        <header className="w-full bg-white shadow rounded-xl p-4 flex items-center justify-center gap-3 border border-gray-200">
+        <header className="w-full bg-white shadow rounded-2xl p-4 flex items-center justify-center gap-3 border border-gray-200">
           <PokeballLogo />
           <h1 className="text-xl text-center font-semibold">
             Poké<span className="text-red-500">dex</span>
@@ -88,36 +90,36 @@ export default function App() {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2">
-              <p className="text-gray-600 font-normal text-sm">
-                Pokemones por página:
-              </p>
-              <select
-                name="pages"
-                className="bg-white rounded-full px-2.5 py-0.5 border border-gray-300 outline-none font-semibold text-gray-600"
-                onChange={handlePagination}
-                value={rateLimit}
-              >
-                <option value="12">12</option>
-                <option value="24">24</option>
-                <option value="48">48</option>
-              </select>
-            </div>
-
             {/* Contenido principal */}
-            <main className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 min-w-0">
+            <main className="w-full space-y-5">
               {isLoading ? (
-                <div className="col-span-full mx-auto text-gray-400 text-xl">
-                  Cargando...
-                </div>
+                <PokemonLoading />
               ) : resultsPokemons.length === 0 && isSearchMode ? (
-                <p className="col-span-full text-center text-gray-500">
-                  No se encontró ningún Pokémon
-                </p>
+                <PokemonNotResults />
               ) : (
-                resultsPokemons.map((pokemon) => (
-                  <PokemonCard key={pokemon.id} pokemon={pokemon} />
-                ))
+                <>
+                  <div className="flex items-center justify-end gap-2">
+                    <p className="text-gray-600 font-normal text-sm">
+                      Pokemones por página:
+                    </p>
+                    <select
+                      name="pages"
+                      className="bg-white rounded-full px-2.5 py-0.5 border border-gray-300 outline-none font-semibold text-gray-600"
+                      onChange={handlePagination}
+                      value={rateLimit}
+                    >
+                      <option value="12">12</option>
+                      <option value="24">24</option>
+                      <option value="48">48</option>
+                    </select>
+                  </div>
+
+                  <div className="w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 min-w-0">
+                    {resultsPokemons.map((pokemon) => (
+                      <PokemonCard key={pokemon.id} pokemon={pokemon} />
+                    ))}
+                  </div>
+                </>
               )}
             </main>
           </div>
