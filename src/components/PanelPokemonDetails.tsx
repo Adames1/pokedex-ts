@@ -15,15 +15,15 @@ export default function PanelPokemonDetails() {
 
   return (
     <aside
-      className={`fixed inset-0 z-50 bg-white p-4 rounded-md
+      className={`fixed inset-0 z-50 bg-white p-4 rounded-xl
         transform transition-transform duration-300 ease-in-out
         ${showPanel ? "translate-x-0" : "translate-x-full"}
          md:inset-auto md:z-auto md:translate-x-0
-        md:w-82 md:h-160 lg:h-170 md:shrink-0 md:sticky shadow`}
+        md:w-75 md:h-130 md:shrink-0 md:sticky shadow`}
     >
       <>
         <button
-          className="bg-slate-200 font-medium text-black text-sm px-2 py-1 rounded-lg cursor-pointer md:hidden"
+          className="bg-slate-100 font-medium text-black text-sm w-20 h-7 rounded-full cursor-pointer md:hidden"
           onClick={closePanel}
         >
           Cerrar
@@ -32,14 +32,19 @@ export default function PanelPokemonDetails() {
         {isLoadingDetails || !selectedPokemon ? (
           <div className="flex items-center justify-center">Cargando...</div>
         ) : hasSelectedPokemon ? (
-          <div className="mt-10 md:mt-0 flex items-center justify-center">
+          <div className="mt-4 md:mt-0 flex items-center justify-center">
             <PokemonDetails selectedPokemon={selectedPokemon} />
           </div>
         ) : (
-          <p className="text-md text-slate-800 text-center my-20">
-            No has seleccionado un Pokémon. Has clic en un Pokémon para ver el
-            detalle.
-          </p>
+          <div className="h-full flex flex-col items-center justify-center gap-2 text-center">
+            <img src="/icon_pokeball.svg" />
+            <div className="space-y-1">
+              <h3 className="font-semibold text-gray-700">Elige un Pokémon</h3>
+              <p className="text-sm text-gray-600 font-medium">
+                Toca una tarjeta para ver sus estadisticas y habilidades.
+              </p>
+            </div>
+          </div>
         )}
       </>
     </aside>
